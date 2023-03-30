@@ -1,89 +1,71 @@
 import { CountryCard, HomeContainer } from '@/styles/pages/home';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-export default function Home() {
+interface HomeProps {
+  countries: {
+    name: {
+      common: string;
+    }
+    translations: {
+      por: {
+        common: string;
+      }
+    };
+    capital: string[];
+    region: string;
+    population: number;
+    flags: {
+      png: string;
+      alt: string;
+    }
+  } []
+}
+
+export default function Home({countries}: HomeProps) {
+  const router = useRouter();
+
   return (
     <HomeContainer>
-      <CountryCard>
-        <Image
-          src="https://flagcdn.com/w320/br.png"
-          alt=""
-          width={270}
-          height={158}
-        />
-        <div>
-          <h1>Brasil</h1>
-          <p>
-            <span>População: </span>120.000.000
-          </p>
-          <p>
-            <span>Região: </span>América
-          </p>
-          <p>
-            <span>Capital: </span>Brasília
-          </p>
-        </div>
-      </CountryCard>
-      <CountryCard>
-        <Image
-          src="https://flagcdn.com/w320/br.png"
-          alt=""
-          width={270}
-          height={158}
-        />
-        <div>
-          <h1>Brasil</h1>
-          <p>
-            <span>População: </span>120.000.000
-          </p>
-          <p>
-            <span>Região: </span>América
-          </p>
-          <p>
-            <span>Capital: </span>Brasília
-          </p>
-        </div>
-      </CountryCard>
-      <CountryCard>
-        <Image
-          src="https://flagcdn.com/w320/br.png"
-          alt=""
-          width={270}
-          height={158}
-        />
-        <div>
-          <h1>Brasil</h1>
-          <p>
-            <span>População: </span>120.000.000
-          </p>
-          <p>
-            <span>Região: </span>América
-          </p>
-          <p>
-            <span>Capital: </span>Brasília
-          </p>
-        </div>
-      </CountryCard>
-      <CountryCard>
-        <Image
-          src="https://flagcdn.com/w320/br.png"
-          alt=""
-          width={270}
-          height={158}
-        />
-        <div>
-          <h1>Brasil</h1>
-          <p>
-            <span>População: </span>120.000.000
-          </p>
-          <p>
-            <span>Região: </span>América
-          </p>
-          <p>
-            <span>Capital: </span>Brasília
-          </p>
-        </div>
-      </CountryCard>
+      {countries.map((country) => (
+        <CountryCard
+          key={country.flags.png}
+          onClick={() => router.push(`/${country.name.common}`)}
+        >
+          <Image
+            src={country.flags.png}
+            alt={country.flags.alt}
+            width={270}
+            height={158}
+          />
+          <div>
+            <h1>{country.translations.por.common}</h1>
+            <p>
+              <span>População: </span>{country.population}
+            </p>
+            <p>
+              <span>Região: </span>{country.region}
+            </p>
+            <p>
+              <span>Capital: </span>{country.capital}
+            </p>
+          </div>
+        </CountryCard>
+      ))}
     </HomeContainer>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const url = 'https://restcountries.com/v3.1/all?fields=capital,translations,region,population,flags';
+  const response = await fetch(url);
+  const countries = await response.json();
+
+  return {
+    props: {
+      countries
+    },
+    revalidate: 60 * 60 * 24, // 24 hour
+  };
+};

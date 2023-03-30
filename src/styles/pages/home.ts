@@ -5,6 +5,11 @@ export const CountryCard = styled.div`
   width: 270px;
   height: 339px;
   border-radius: 8px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.6;
+  }
 
   img {
     border-top-left-radius: 8px;
@@ -18,6 +23,9 @@ export const CountryCard = styled.div`
       margin-top: 26px;
       margin-bottom: 20px;
       line-height: 27px;
+      max-height: 27px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     p {
