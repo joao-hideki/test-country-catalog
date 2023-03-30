@@ -65,7 +65,7 @@ export default function CountryDetails({country}: CountryDetailsProps) {
               <span>Nome nativo: </span>{(Object.values(country.name.nativeName.any))[0]}
             </p> */}
             <p>
-              <span>População: </span>{country.population}
+              <span>População: </span>{Intl.NumberFormat('pt-br').format(country.population)}
             </p>
             <p>
               <span>Região: </span>{country.region}

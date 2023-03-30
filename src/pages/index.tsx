@@ -42,7 +42,7 @@ export default function Home({countries}: HomeProps) {
           <div>
             <h1>{country.translations.por.common}</h1>
             <p>
-              <span>População: </span>{country.population}
+              <span>População: </span>{Intl.NumberFormat('pt-br').format(country.population)}
             </p>
             <p>
               <span>Região: </span>{country.region}
